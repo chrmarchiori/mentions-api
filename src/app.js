@@ -1,13 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
+// Load models
+const Mentions = require('./models/mentions');
 
 // App
 const app = express();
 
 // Database
 mongoose.connect(process.env.DATABASE_CONNECTION_STRING, {
-    useNewUrlParser: true
+    useUnifiedTopology: true,
+    useFindAndModify: true,
+    useNewUrlParser: true,
+    useCreateIndex: true 
 });
 
 const db = mongoose.connection;
@@ -36,5 +41,8 @@ process.on('SIGINT', () => {
 // Load routes
 const indexRoutes = require('./routes/index-routes');
 app.use('/', indexRoutes);
+
+const mentionsRoutes = require('./routes/mentions-routes');
+app.use('/mentions', mentionsRoutes);
 
 module.exports = app;
